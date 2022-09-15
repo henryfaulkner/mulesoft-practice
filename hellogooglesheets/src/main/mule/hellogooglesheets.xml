@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:oauth="http://www.mulesoft.org/schema/mule/oauth" xmlns:google-sheets="http://www.mulesoft.org/schema/mule/google-sheets"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/google-sheets http://www.mulesoft.org/schema/mule/google-sheets/current/mule-google-sheets.xsd
+http://www.mulesoft.org/schema/mule/oauth http://www.mulesoft.org/schema/mule/oauth/current/mule-oauth.xsd">
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="a6f59fd8-b287-45d3-ab5c-5c7f9414aa09" >
+		<http:listener-connection host="localhost" port="8082" />
+	</http:listener-config>
+	<google-sheets:config name="Google_Sheets_Config" doc:name="Google Sheets Config" doc:id="77a7f69c-be27-4327-987d-593c8b850488" >
+		<google-sheets:oauth-2-0-connection >
+			<google-sheets:oauth-authorization-code consumerKey="539520759489-6mb5v8m2kacbr55t05bi9cjoususurcd.apps.googleusercontent.com" consumerSecret="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" before="hellogooglesheetsFlow" after="hellogooglesheetsFlow"/>
+			<google-sheets:oauth-callback-config listenerConfig="HTTP_Listener_config1" callbackPath="/callback" authorizePath="/authorize" externalCallbackUrl="http://localhost:8082/callback"/>
+		</google-sheets:oauth-2-0-connection>
+	</google-sheets:config>
+	<flow name="hellogooglesheetsFlow" doc:id="bf07b5d1-5111-4712-810b-0c73e14fd713" >
+		<http:listener doc:name="Listener" doc:id="bbeb09dc-5342-4b6e-a4e2-cfcb92343bee" config-ref="HTTP_Listener_config1" path="/HelloGoogleSheets"/>
+		<google-sheets:get-spreadsheets-by-spreadsheet-id doc:name="Get Spreadsheet Properties" doc:id="7ec63f05-04d4-4a96-a4e7-7465dad1ff9e" spreadsheetId="10weAkqX-7eVNumfOiyYpWgrEKgFEQ-mwGwBXBVen2-k" config-ref="Google_Sheets_Config"/>
+	</flow>
+</mule>
